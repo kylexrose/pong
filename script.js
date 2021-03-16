@@ -19,16 +19,31 @@ const ball = document.querySelector('.ball');
 const playerPaddle = document.querySelector('.player-paddle');
 // Initial computer paddle y-position and y-velocity
 let computerPaddleYPosition = 0;
-let computerPaddleYVelocity = 3;
+let computerPaddleYVelocity = 2;
 let playerPaddleYPosition = 0;
-
+let playerPaddleYVelocity = 0;
 
 let ballYVelocity = 2;
 let ballYPos = 0;
-let ballXVelocity = 2;
+let ballXVelocity = 3;
 let ballXPos = 20;
 
+document.addEventListener('keydown', (e) => {
+    if(e.key === "ArrowUp"){
+        if(playerPaddleYPosition > 0){
+            playerPaddleYVelocity = -2;
+        }
+    }else if(e.key === "ArrowDown"){
+        if(playerPaddleYPosition < GAME_AREA_HEIGHT - PADDLE_HEIGHT){
+            playerPaddleYVelocity = 2;
+        }
+    }
+})
 
+document.addEventListener('keyup', (e) =>{
+    if(e.key === "ArrowUp" || e.key === "ArrowDown"){
+            playerPaddleYVelocity = 0;
+    }});
 
 // Update the pong world
 function update() {
@@ -41,6 +56,8 @@ function update() {
     }else if(computerPaddleYPosition > GAME_AREA_HEIGHT - PADDLE_HEIGHT){
         computerPaddleYPosition = GAME_AREA_HEIGHT - PADDLE_HEIGHT;
     }
+
+    playerPaddleYPosition += playerPaddleYVelocity;
     
     ballYPos += ballYVelocity;
     ballXPos += ballXVelocity;
