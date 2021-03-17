@@ -51,7 +51,8 @@ document.addEventListener('keyup', (e) => {
 
 // Update the pong world
 function update() {
-    ballYVelocity = ballYVelocity < 15 ? ballYVelocity : 15;
+    
+    //ballYVelocity = ballYVelocity < 15 ? ballYVelocity : 15;
     //computerPaddleYPosition += computerPaddleYVelocity;
     computerPaddleYPosition = ballYPos - 40;
     if(computerPaddleYPosition < 0){
@@ -59,7 +60,11 @@ function update() {
     }else if(computerPaddleYPosition > GAME_AREA_HEIGHT - PADDLE_HEIGHT){
         computerPaddleYPosition = GAME_AREA_HEIGHT - PADDLE_HEIGHT;
     }
+    
+    //update player paddle
     playerPaddleYPosition += playerPaddleYVelocity;
+    
+    //stop player paddle from going out of bounds
     if (playerPaddleYPosition < 0){
         playerPaddleYPosition = 0;
     }
@@ -67,19 +72,22 @@ function update() {
         playerPaddleYPosition = GAME_AREA_HEIGHT - PADDLE_HEIGHT;
     }
     
-    
+    //update ball position variable
     ballYPos += ballYVelocity;
     ballXPos += ballXVelocity;
 
+    //conditionals to bounce off of paddles
     paddleCollision();
-
+    
+    //for when the ball hits the top and bottom bounds
     if (computerPaddleYPosition >= (GAME_AREA_HEIGHT - PADDLE_HEIGHT) || computerPaddleYPosition < 0){
         computerPaddleYVelocity *= -1;
     }
     if(ballYPos >= GAME_AREA_HEIGHT - BALL_SIZE || ballYPos < 0){
         ballYVelocity *= -1;
     }
-    
+
+    //for when the ball hits a wall
     if(ballXPos >= GAME_AREA_WIDTH - BALL_SIZE){
         playerScore++;
         ballYVelocity = 2;
