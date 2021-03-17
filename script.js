@@ -7,7 +7,7 @@ const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 20;
 
 //player speeds
-const COMPUTER_SPEED = .5;
+const COMPUTER_SPEED = 3;
 const PLAYER_SPEED = 3;
 
 // Size of the ball (in px)
@@ -60,7 +60,7 @@ function update() {
     
     //update paddle position
     computerPaddleYPosition += computerPaddleYVelocity;
-    computerPaddleYPosition = ballYPos - 40;
+    //computerPaddleYPosition = ballYPos - 40;
     if(computerPaddleYPosition < 0){
         computerPaddleYPosition = 0;
     }else if(computerPaddleYPosition > GAME_AREA_HEIGHT - PADDLE_HEIGHT){
@@ -95,13 +95,13 @@ function update() {
         playerScore++;
         ballYVelocity = 2;
         ballYPos = 0;
-        ballXVelocity = 2;
+        ballXVelocity = 4;
         ballXPos = 20;
     }else if(ballXPos < 0){
         computerScore++;
         ballYVelocity = 2;
         ballYPos = 0;
-        ballXVelocity = 2;
+        ballXVelocity = 4;
         ballXPos = 20;
     }
 
