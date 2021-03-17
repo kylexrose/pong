@@ -32,23 +32,26 @@ document.addEventListener('keydown', (e) => {
     if(e.key === "ArrowUp"){
         if(playerPaddleYPosition > 0){
             playerPaddleYVelocity = -2;
+        }else{
+            playerPaddleYVelocity = 0;
         }
     }else if(e.key === "ArrowDown"){
         if(playerPaddleYPosition < GAME_AREA_HEIGHT - PADDLE_HEIGHT){
             playerPaddleYVelocity = 2;
+        }else{
+            playerPaddleYVelocity = 0;
         }
     }
 })
 
-document.addEventListener('keyup', (e) =>{
+document.addEventListener('keyup', (e) => {
     if(e.key === "ArrowUp" || e.key === "ArrowDown"){
             playerPaddleYVelocity = 0;
     }});
 
 // Update the pong world
 function update() {
-    ballYVelocity = Math.abs(ballYVelocity) < 10 ? ballYVelocity : 10
-    // Update the computer paddle's position
+    ballYVelocity = ballYVelocity < 15 ? ballYVelocity : 15;
     //computerPaddleYPosition += computerPaddleYVelocity;
     computerPaddleYPosition = ballYPos - 40;
     if(computerPaddleYPosition < 0){
@@ -56,8 +59,14 @@ function update() {
     }else if(computerPaddleYPosition > GAME_AREA_HEIGHT - PADDLE_HEIGHT){
         computerPaddleYPosition = GAME_AREA_HEIGHT - PADDLE_HEIGHT;
     }
-
     playerPaddleYPosition += playerPaddleYVelocity;
+    if (playerPaddleYPosition < 0){
+        playerPaddleYPosition = 0;
+    }
+    if (playerPaddleYPosition > GAME_AREA_HEIGHT - PADDLE_HEIGHT){
+        playerPaddleYPosition = GAME_AREA_HEIGHT - PADDLE_HEIGHT;
+    }
+    
     
     ballYPos += ballYVelocity;
     ballXPos += ballXVelocity;
@@ -102,17 +111,16 @@ function paddleCollision(){
     if (ballYPos + BALL_SIZE >= computerPaddleYPosition && 
         ballYPos <= computerPaddleYPosition + PADDLE_HEIGHT &&
         ballXPos + BALL_SIZE === GAME_AREA_WIDTH - PADDLE_WIDTH){
-            const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2))) * .25;
-            ballYVelocity += velChange;
-            ballXVelocity *= -1
-            return true;
-    }else if (ballYPos >= playerPaddleYPosition && 
-        ballYPos <= playerPaddleYPosition + PADDLE_HEIGHT &&
-        ballXPos === PADDLE_WIDTH){
-            const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2))) * .25;
-            ballYVelocity += velChange;
+            //const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
+            //ballYVelocity = velChange;
+            console.log(ballYPos, BALL_SIZE, computerPaddleYPosition, PADDLE_HEIGHT)
             ballXVelocity *= -1;
-            return true;
+    }else if (ballYPos >= playerPaddleYPosition && 
+        ballYPos - BALL_SIZE <= playerPaddleYPosition + PADDLE_HEIGHT &&
+        ballXPos === PADDLE_WIDTH){
+            //const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
+            //ballYVelocity = velChange;
+            ballXVelocity *= -1;
         }
 }
 
