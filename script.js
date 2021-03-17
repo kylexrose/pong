@@ -87,22 +87,22 @@ function update() {
     
     //for when the ball hits the top and bottom bounds
     if((ballYPos >= GAME_AREA_HEIGHT - BALL_SIZE && ballYVelocity > 0) || ballYPos < 0 && ballYVelocity < 0){
-        ballYVelocity *= -1; console.log(ballYPos, GAME_AREA_HEIGHT - BALL_SIZE, )
+        ballYVelocity *= -1;
     }
 
     //for when the ball hits a wall
     if(ballXPos >= GAME_AREA_WIDTH - BALL_SIZE){
         playerScore++;
         ballYVelocity = 2;
-        ballYPos = 0//.2 * GAME_AREA_HEIGHT;
-        ballXVelocity = ((playerScore + computerScore) %2) ? 4 : -4;
-        ballXPos = GAME_AREA_WIDTH / 2;
+        ballYPos = 0;
+        ballXVelocity = 4;
+        ballXPos = 20;
     }else if(ballXPos < 0){
         computerScore++;
         ballYVelocity = 2;
-        ballYPos = 0//.2 * GAME_AREA_HEIGHT;
-        ballXVelocity = ((playerScore + computerScore) %2) ? 4 : -4;
-        ballXPos = 0//GAME_AREA_WIDTH / 2;
+        ballYPos = 0;
+        ballXVelocity = 4;
+        ballXPos = 20;
     }
 
     updateScore();
@@ -133,13 +133,13 @@ function paddleCollision(){
     if (ballYPos + BALL_SIZE >= computerPaddleYPosition && 
         ballYPos <= computerPaddleYPosition + PADDLE_HEIGHT &&
         ballXPos + BALL_SIZE === GAME_AREA_WIDTH - PADDLE_WIDTH){
-            const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.4;
+            const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
             ballYVelocity = velChange;
             ballXVelocity *= -1;
     }else if (ballYPos + BALL_SIZE  >= playerPaddleYPosition && 
         ballYPos <= playerPaddleYPosition + PADDLE_HEIGHT &&
         ballXPos === PADDLE_WIDTH){
-            const velChange = ((ballYPos + (BALL_SIZE/2)) - (playerPaddleYPosition + (PADDLE_HEIGHT/2)))*.4;
+            const velChange = ((ballYPos + (BALL_SIZE/2)) - (playerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
             ballYVelocity = velChange;
             ballXVelocity *= -1;
         }
