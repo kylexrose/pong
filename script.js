@@ -7,8 +7,8 @@ const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 20;
 
 //player speeds
-const COMPUTER_SPEED = 3;
-const PLAYER_SPEED = 3;
+const COMPUTER_SPEED = 4;
+const PLAYER_SPEED = 4;
 
 // Size of the ball (in px)
 const BALL_SIZE = 20;
@@ -114,7 +114,13 @@ function update() {
     ball.style.left = `${ballXPos}px`;
 
     //prep computer's next move
-    computerPaddleYVelocity = computerPaddleYPosition + 50 < ballYPos + 10 ? COMPUTER_SPEED : (-1 * COMPUTER_SPEED);
+    if(computerPaddleYPosition + 50 < ballYPos){
+        computerPaddleYVelocity = COMPUTER_SPEED;
+    }else if(computerPaddleYPosition > ballYPos + 20){
+        computerPaddleYVelocity = -COMPUTER_SPEED;
+    }else{
+        computerPaddleYVelocity = 0;
+    }
 }
 
 // Call the update() function everytime the browser is ready to re-render
