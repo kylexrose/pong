@@ -39,3 +39,15 @@ body {
     right: 0;
 }
 
+#scores {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+
+p {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 70px;
+    margin: 30px
+}

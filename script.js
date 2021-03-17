@@ -6,6 +6,10 @@ const GAME_AREA_HEIGHT = 500;
 const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 20;
 
+//player speeds
+const COMPUTER_SPEED = .5;
+const PLAYER_SPEED = 3;
+
 // Size of the ball (in px)
 const BALL_SIZE = 20;
 let playerScore = 0;
@@ -25,19 +29,19 @@ let playerPaddleYVelocity = 0;
 
 let ballYVelocity = 2;
 let ballYPos = 0;
-let ballXVelocity = 3;
+let ballXVelocity = 4;
 let ballXPos = 20;
 
 document.addEventListener('keydown', (e) => {
     if(e.key === "ArrowUp"){
         if(playerPaddleYPosition > 0){
-            playerPaddleYVelocity = -2;
+            playerPaddleYVelocity = -1 * PLAYER_SPEED;
         }else{
             playerPaddleYVelocity = 0;
         }
     }else if(e.key === "ArrowDown"){
         if(playerPaddleYPosition < GAME_AREA_HEIGHT - PADDLE_HEIGHT){
-            playerPaddleYVelocity = 2;
+            playerPaddleYVelocity = PLAYER_SPEED;
         }else{
             playerPaddleYVelocity = 0;
         }
@@ -51,9 +55,11 @@ document.addEventListener('keyup', (e) => {
 
 // Update the pong world
 function update() {
+    //cap the max y velocity of ball 
+    ballYVelocity = ballYVelocity < 8 ? ballYVelocity : 8;
     
-    //ballYVelocity = ballYVelocity < 15 ? ballYVelocity : 15;
-    //computerPaddleYPosition += computerPaddleYVelocity;
+    //update paddle position
+    computerPaddleYPosition += computerPaddleYVelocity;
     computerPaddleYPosition = ballYPos - 40;
     if(computerPaddleYPosition < 0){
         computerPaddleYPosition = 0;
@@ -80,11 +86,8 @@ function update() {
     paddleCollision();
     
     //for when the ball hits the top and bottom bounds
-    if (computerPaddleYPosition >= (GAME_AREA_HEIGHT - PADDLE_HEIGHT) || computerPaddleYPosition < 0){
-        computerPaddleYVelocity *= -1;
-    }
-    if(ballYPos >= GAME_AREA_HEIGHT - BALL_SIZE || ballYPos < 0){
-        ballYVelocity *= -1;
+    if((ballYPos >= GAME_AREA_HEIGHT - BALL_SIZE && ballYVelocity > 0) || ballYPos < 0 && ballYVelocity < 0){
+        ballYVelocity *= -1; console.log(ballYPos, GAME_AREA_HEIGHT - BALL_SIZE, )
     }
 
     //for when the ball hits a wall
@@ -101,12 +104,17 @@ function update() {
         ballXVelocity = 2;
         ballXPos = 20;
     }
+
+    updateScore();
     
     //Apply positions
     computerPaddle.style.top = `${computerPaddleYPosition}px`;
     playerPaddle.style.top = `${playerPaddleYPosition}px`;
     ball.style.top = `${ballYPos}px`;
     ball.style.left = `${ballXPos}px`;
+
+    //prep computer's next move
+    computerPaddleYVelocity = computerPaddleYPosition + 50 < ballYPos + 10 ? COMPUTER_SPEED : (-1 * COMPUTER_SPEED);
 }
 
 // Call the update() function everytime the browser is ready to re-render
@@ -119,17 +127,21 @@ function paddleCollision(){
     if (ballYPos + BALL_SIZE >= computerPaddleYPosition && 
         ballYPos <= computerPaddleYPosition + PADDLE_HEIGHT &&
         ballXPos + BALL_SIZE === GAME_AREA_WIDTH - PADDLE_WIDTH){
-            //const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
-            //ballYVelocity = velChange;
+            const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
+            ballYVelocity = velChange;
             console.log(ballYPos, BALL_SIZE, computerPaddleYPosition, PADDLE_HEIGHT)
             ballXVelocity *= -1;
-    }else if (ballYPos >= playerPaddleYPosition && 
-        ballYPos - BALL_SIZE <= playerPaddleYPosition + PADDLE_HEIGHT &&
+    }else if (ballYPos + BALL_SIZE  >= playerPaddleYPosition && 
+        ballYPos <= playerPaddleYPosition + PADDLE_HEIGHT &&
         ballXPos === PADDLE_WIDTH){
-            //const velChange = ((ballYPos + (BALL_SIZE/2)) - (computerPaddleYPosition + (PADDLE_HEIGHT/2)))*.5;
-            //ballYVelocity = velChange;
+            const velChange = ((ballYPos + (BALL_SIZE/2)) - (playerPaddleYPosition + (PADDLE_HEIGHT/2)))*.4;
+            ballYVelocity = velChange;
             ballXVelocity *= -1;
         }
 }
 
+function updateScore(){
+    document.querySelector('#playerScore').innerHTML = playerScore;
+    document.querySelector('#compScore').innerHTML = computerScore;
+}
 window.requestAnimationFrame(loop);
